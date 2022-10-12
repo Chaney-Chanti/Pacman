@@ -1,11 +1,13 @@
 import time
 import pygame as pg
 from settings import Settings
+from wall import Wall
 import game_functions as gf
 from sound import Sound
 from scoreboard import Scoreboard
 from button import Button
 import sys
+import pprint
 
 def get_font(size): 
     return pg.font.Font("assets/font.ttf", size)
@@ -74,16 +76,35 @@ class Game:
         pg.display.set_caption("PACMAN")
         self.sound.play_bg()
         with open("map.txt", "r") as f:
-            map = []
+            game_map = []
             rows = f.readlines()
             for line in rows:
-                map.append(line[:-1])    
-        print(map)
+                game_map.append(line[:-1])    
+
+        pprint.pprint(game_map)
+
+        wall = pg.image.load('images/wall.png')
+
+        for row in range(0, len(game_map)):
+            for column in range(0, len(game_map[row])):
+                if game_map[row][column] == '#':
+                    print('hashtag')
+                    newWall = Wall(self.screen, row, column)
+                    newWall.draw(self.screen)
+                if game_map[row][column] == '.':
+                    print('food')
+                else:
+                    print('something else')
+
         while True: 
             gf.check_events(settings=self.settings)
             self.screen.fill(self.settings.bg_color)
+            pg.display.update()
             self.scoreboard.update()
             pg.display.flip()
+
+
+
     
 def main():
     g = Game()
