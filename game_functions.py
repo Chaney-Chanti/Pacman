@@ -28,12 +28,11 @@ def check_keyup_events(event):
     #     ship.vel = Vector()   
 
 def check_events(settings): 
-    pass
-    # for event in pg.event.get():
-    #     if event.type == pg.QUIT: sys.exit()
-    #     elif event.type == pg.KEYDOWN: check_keydown_events(event=event, settings=settings)
-    #     elif event.type == pg.KEYUP: 
-    #         check_keyup_events(event=event)
+    for event in pg.event.get():
+       if event.type == pg.QUIT: sys.exit()
+    #    elif event.type == pg.KEYDOWN: check_keydown_events(event=event, settings=settings)
+    #    elif event.type == pg.KEYUP: 
+    #        check_keyup_events(event=event)
 
 def clamp(posn, rect, settings):
     pass
