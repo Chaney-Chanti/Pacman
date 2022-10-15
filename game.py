@@ -1,7 +1,7 @@
 import time
 import pygame as pg
 from settings import Settings
-from wall import Wall
+from map import Wall, Map
 import game_functions as gf
 from sound import Sound
 from scoreboard import Scoreboard
@@ -19,6 +19,7 @@ class Game:
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
 
+        self.map = Map(self.screen)
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
 
@@ -39,7 +40,7 @@ class Game:
 
     def menu(self):
         pg.display.set_caption("Menu")
-        self.sound.play_bg()
+        pg.mixer.music.play()
         
         while True:
             MENU_MOUSE = pg.mouse.get_pos()
@@ -74,33 +75,13 @@ class Game:
         
     def play(self): #NEED TO REPLACE MENTIONS OF "SHIP" WITH "PACMAN" ONCE PACMAN HAS BEEN IMPLEMENTED
         pg.display.set_caption("PACMAN")
-        self.sound.play_bg()
-        game_map = []
-        self.screen.fill(self.settings.bg_color)
-        with open("map.txt", "r") as f:
-            rows = f.readlines()
-            for line in rows:
-                game_map.append(line[:-1])    
-
-        pprint.pprint(game_map)
-
-        for row in range(0, len(game_map)):
-            for column in range(0, len(game_map[row])):
-                if game_map[row][column] == '#':
-                    print(f'wall at ({column}, {row}), row length {len(game_map[row])}')
-                    newWall = Wall(self.screen, column, row)
-                    newWall.draw(self.screen)
-                if game_map[row][column] == '.':
-                    print('food')
-                else:
-                    print('something else')
 
         while True:
             gf.check_events(settings=self.settings)
-            # self.screen.fill(self.settings.bg_color)
-            # pg.display.update()
+            self.screen.fill(self.settings.bg_color)
+            self.map.update()
             self.scoreboard.update()
-            pg.display.flip()
+            pg.display.update()
 
 
 
