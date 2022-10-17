@@ -1,7 +1,7 @@
 import time
 import pygame as pg
 from settings import Settings
-from map import Wall, Map
+from wall import Wall
 import game_functions as gf
 from sound import Sound
 from scoreboard import Scoreboard
@@ -19,7 +19,6 @@ class Game:
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
 
-        self.map = Map(self.screen)
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
 
@@ -40,20 +39,39 @@ class Game:
 
     def menu(self):
         pg.display.set_caption("Menu")
-        pg.mixer.music.play()
+        self.sound.play_bg()
         
         while True:
             MENU_MOUSE = pg.mouse.get_pos()
+            
+            TITLE = pg.image.load("assets/PacmanTitle.png")
+            MENU_TITLE = pg.transform.scale(TITLE, (800,800))
+            MENU_RECT = MENU_TITLE.get_rect(center=(self.settings.screen_width / 2, (self.settings.screen_height / 2) - 300))
 
-            MENU_TEXT = get_font(75).render("PACMAN", True, "#b68f40")
-            MENU_RECT = MENU_TEXT.get_rect(center=(self.settings.screen_width / 2, (self.settings.screen_height / 2) - 200))
-
-            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2)), 
+            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 200), 
                 text_input="PLAY GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 100), 
+            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 300), 
                 text_input="QUIT GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+            
+            PACMAN = pg.image.load("assets/PacR2.png")
+            BLINKY = pg.image.load("assets/BlinkyR.png")
+            INKY = pg.image.load("assets/InkyR.png")
+            CLYDE = pg.image.load("assets/ClydeR.png")
+            #BLINKY = pg.image.load("assets/BlinkyR.png")
+            
+            PACMANPOS = PACMAN.get_rect(center=((self.settings.screen_width / 2) + 50, (self.settings.screen_height / 2)))
+            BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 50, (self.settings.screen_height / 2)))
+            INKYPOS = INKY.get_rect(center=((self.settings.screen_width / 2) - 100, (self.settings.screen_height / 2)))
+            CLYDEPOS = CLYDE.get_rect(center=((self.settings.screen_width / 2) - 150, (self.settings.screen_height / 2)))
+            #BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 100, (self.settings.screen_height / 2)))
+            
+            self.screen.blit(PACMAN,PACMANPOS)
+            self.screen.blit(BLINKY, BLINKYPOS)
+            self.screen.blit(INKY, INKYPOS)
+            self.screen.blit(CLYDE, CLYDEPOS)
+            #self.screen.blit(BLINKY, GHOSTPOS)
 
-            self.screen.blit(MENU_TEXT, MENU_RECT)
+            self.screen.blit(MENU_TITLE, MENU_RECT)
 
             for button in [PLAY_BUTTON,QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE)
@@ -75,13 +93,33 @@ class Game:
         
     def play(self): #NEED TO REPLACE MENTIONS OF "SHIP" WITH "PACMAN" ONCE PACMAN HAS BEEN IMPLEMENTED
         pg.display.set_caption("PACMAN")
+        self.sound.play_bg()
+        game_map = []
+        self.screen.fill(self.settings.bg_color)
+        with open("map.txt", "r") as f:
+            rows = f.readlines()
+            for line in rows:
+                game_map.append(line[:-1])    
+
+        pprint.pprint(game_map)
+
+        for row in range(0, len(game_map)):
+            for column in range(0, len(game_map[row])):
+                if game_map[row][column] == '#':
+                    print(f'wall at ({column}, {row}), row length {len(game_map[row])}')
+                    newWall = Wall(self.screen, column, row)
+                    newWall.draw(self.screen)
+                if game_map[row][column] == '.':
+                    print('food')
+                else:
+                    print('something else')
 
         while True:
             gf.check_events(settings=self.settings)
-            self.screen.fill(self.settings.bg_color)
-            self.map.update()
+            # self.screen.fill(self.settings.bg_color)
+            # pg.display.update()
             self.scoreboard.update()
-            pg.display.update()
+            pg.display.flip()
 
 
 
