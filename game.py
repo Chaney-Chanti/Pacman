@@ -47,11 +47,7 @@ class Game:
             TITLE = pg.image.load("assets/PacmanTitle.png")
             MENU_TITLE = pg.transform.scale(TITLE, (800,800))
             MENU_RECT = MENU_TITLE.get_rect(center=(self.settings.screen_width / 2, (self.settings.screen_height / 2) - 300))
-
-            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 200), 
-                text_input="PLAY GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 300), 
-                text_input="QUIT GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+            self.screen.blit(MENU_TITLE, MENU_RECT)
             
             PACMAN = pg.image.load("assets/PacR2.png")
             BLINKY = pg.image.load("assets/BlinkyR.png")
@@ -70,10 +66,15 @@ class Game:
             self.screen.blit(INKY, INKYPOS)
             self.screen.blit(CLYDE, CLYDEPOS)
             #self.screen.blit(BLINKY, GHOSTPOS)
+            
+            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 200), 
+                text_input="PLAY GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+            HIGH_SCORE_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 300), 
+                text_input="HIGH SCORE", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 400), 
+                text_input="QUIT GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
 
-            self.screen.blit(MENU_TITLE, MENU_RECT)
-
-            for button in [PLAY_BUTTON,QUIT_BUTTON]:
+            for button in [PLAY_BUTTON,QUIT_BUTTON,HIGH_SCORE_BUTTON]:
                 button.changeColor(MENU_MOUSE)
                 button.update(self.screen)
         
@@ -84,14 +85,47 @@ class Game:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE):
                         self.play()
+                    if HIGH_SCORE_BUTTON.checkForInput(MENU_MOUSE):
+                        self.high_score_window()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE):
                         pg.quit()
                         sys.exit()
             
             pg.display.update()
             self.screen.fill((0, 0, 0))
+    
+    def high_score_window(self):
+        pg.display.set_caption("HIGH SCORE")
+        high_score_file = open("high_score.txt", "r")
+        name = high_score_file.readline(10)
+        score = high_score_file.readline(10)
+        font = get_font(30)
+        text = font.render("The high score is " + score + ", held by " + name + ".", True, (255,255,255), (0,0,0))
+        text_rect= text.get_rect(center=((self.settings.screen_width) / 2, (self.settings.screen_height) / 2))
+        while True:
+            MENU_MOUSE = pg.mouse.get_pos()
+            self.screen.fill(self.settings.bg_color)
+            self.screen.blit(text, text_rect)
+            
+            BACK_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(150, 50), 
+                text_input="<-BACK", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+            for button in [BACK_BUTTON]:
+                button.changeColor(MENU_MOUSE)
+                button.update(self.screen)
+                
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if BACK_BUTTON.checkForInput(MENU_MOUSE):
+                        self.menu()
+            
+            pg.display.update()
         
-    def play(self): #NEED TO REPLACE MENTIONS OF "SHIP" WITH "PACMAN" ONCE PACMAN HAS BEEN IMPLEMENTED
+        
+        
+    def play(self):
         pg.display.set_caption("PACMAN")
         self.sound.play_bg()
         game_map = []
