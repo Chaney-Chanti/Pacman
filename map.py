@@ -52,7 +52,7 @@ class Map:
 class Wall(pg.sprite.Sprite):
     def __init__(self, screen, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load('images/wall2.png')
+        self.image = pg.image.load('assets/wall2.png')
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = screen
@@ -66,9 +66,9 @@ class Food(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.type = type
         if type == 1:
-            self.image = pg.image.load('images/pill.png')
+            self.image = pg.image.load('assets/pill.png')
         elif type == 2:
-            self.image = pg.image.load('images/strawberry.png')
+            self.image = pg.image.load('assets/strawberry.png')
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = screen
