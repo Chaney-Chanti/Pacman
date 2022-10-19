@@ -6,6 +6,7 @@ class Map:
         self.screen = screen
         self.walls = pg.sprite.Group()
         self.food = pg.sprite.Group()
+        # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
         # self.tile_size = self.get_tile_size()
         self.create_map()
@@ -38,6 +39,8 @@ class Map:
                     # print(f'power item at row {row + 1}, column {column + 1}')
                     newFood = Food(self.screen, column, row, 2)
                     self.food.add(newFood)
+                elif self.game_map[row][column] == 'P':
+                    self.pacman = Pacman(self.screen, row, column)
                 else:
                     # print(f'something else at row {row + 1}, column {column + 1}')
                     pass
@@ -47,6 +50,7 @@ class Map:
             wall.draw()
         for food in self.food:
             food.draw()
+        self.pacman.update()
 
 
 class Wall(pg.sprite.Sprite):
@@ -74,4 +78,34 @@ class Food(pg.sprite.Sprite):
         self.screen = screen
 
     def draw(self):
+        self.screen.blit(self.image, self.rect)
+
+class Pacman(pg.sprite.Sprite):
+    def __init__(self, screen, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.image.load('assets/PacUp1.png')
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
+        self.screen = screen
+
+        self.dying = self.dead = False
+                        
+        # add pacman animation here
+        # self.timer_normal = Alien.alien_timers[type]              
+        # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
+        # self.timer = self.timer_normal 
+
+    def check_collisions_ghost():
+        pass
+
+    def check_collisions_wall():
+        pass
+
+    def update(self):
+        self.draw()
+        return
+        self.check_collisions_ghost()
+        self.check_collisions_wall()
+
+    def draw(self): 
         self.screen.blit(self.image, self.rect)

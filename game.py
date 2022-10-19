@@ -21,7 +21,6 @@ class Game:
         self.map = Map(self.screen)
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
-
         self.settings.initialize_speed_settings()
 
     def reset(self):
@@ -36,7 +35,7 @@ class Game:
         self.reset()
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.menu()
-
+    
     def menu(self):
         pg.display.set_caption("Menu")
         self.sound.play_bg()
@@ -123,8 +122,6 @@ class Game:
             
             pg.display.update()
         
-        
-        
     def play(self):
         pg.display.set_caption("PACMAN")
         pg.mixer.music.stop()
@@ -136,9 +133,6 @@ class Game:
             self.scoreboard.update()
             pg.display.flip()
 
-
-
-    
 def main():
     g = Game()
     g.menu()
