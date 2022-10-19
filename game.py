@@ -67,11 +67,11 @@ class Game:
             #self.screen.blit(BLINKY, GHOSTPOS)
             
             PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 200), 
-                text_input="PLAY GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+                text_input="PLAY GAME", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
             HIGH_SCORE_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 300), 
-                text_input="HIGH SCORE", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+                text_input="HIGH SCORE", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
             QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 400), 
-                text_input="QUIT GAME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+                text_input="QUIT GAME", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
 
             for button in [PLAY_BUTTON,QUIT_BUTTON,HIGH_SCORE_BUTTON]:
                 button.changeColor(MENU_MOUSE)

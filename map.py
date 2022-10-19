@@ -72,7 +72,7 @@ class Food(pg.sprite.Sprite):
         if type == 1:
             self.image = pg.image.load('assets/pill.png')
         elif type == 2:
-            self.image = pg.image.load('assets/strawberry.png')
+            self.image = pg.image.load('assets/bigPill.png')
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = screen
