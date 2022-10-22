@@ -24,6 +24,7 @@ class Game:
 
     def reset(self):
         print('Resetting game...')
+        self.map.reset()
         # self.scoreboard.reset()
 
     def game_over(self):

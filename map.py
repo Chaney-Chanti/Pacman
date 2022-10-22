@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.sprite import Sprite, Group
 from pacman import Pacman
 from ghost import Blinky, Clyde, Inky
 
@@ -7,8 +8,9 @@ class Map:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
-        self.walls = pg.sprite.Group()
-        self.food = pg.sprite.Group()
+        self.walls = Group()
+        self.food = Group()
+        self.ghosts = Group()
         # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
         # self.tile_size = self.get_tile_size()
@@ -46,14 +48,20 @@ class Map:
                     self.pacman = Pacman(self.game, column, row)
                 elif self.game_map[row][column] == 'B':
                     self.blinky = Blinky(self.screen, column, row)
+                    self.ghosts.add(self.blinky)
                 elif self.game_map[row][column] == 'C':
                     self.clyde = Clyde(self.screen, column, row)
+                    self.ghosts.add(self.clyde)
                 elif self.game_map[row][column] == 'I':
                     self.inky = Inky(self.screen, column, row)
+                    self.ghosts.add(self.inky)
                 else:
                     # print(f'something else at row {row + 1}, column {column + 1}')
                     pass
     
+    def reset(self):
+        pass
+
     def update(self):
         for wall in self.walls:
             wall.draw()
@@ -67,7 +75,7 @@ class Map:
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, screen, x, y):
-        pg.sprite.Sprite.__init__(self)
+        Sprite.__init__(self)
         self.image = pg.image.load('assets/wall2.png')
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
@@ -79,7 +87,7 @@ class Wall(pg.sprite.Sprite):
 
 class Food(pg.sprite.Sprite):
     def __init__(self, game, x, y, type):
-        pg.sprite.Sprite.__init__(self)
+        Sprite.__init__(self)
         self.type = type
         if type == 1:
             self.image = pg.image.load('assets/pill.png')

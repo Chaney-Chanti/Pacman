@@ -16,16 +16,22 @@ class Pacman(pg.sprite.Sprite):
         # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
         # self.timer = self.timer_normal 
 
-    def check_collisions_food(self):
+    def check_collisions(self):
         collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
         for food in collisions:
             self.game.scoreboard.increment_score(food.points)
+        collisions = pg.sprite.spritecollide(self ,self.game.map.ghosts, False)
+        if collisions:
+            self.die()
+
+    def die(self):
+        self.game.reset()
 
     def check_collisions_wall(self):
         pass
 
     def update(self):
-        self.check_collisions_food()
+        self.check_collisions()
         self.draw()
         return
         # self.check_collisions_ghost()
