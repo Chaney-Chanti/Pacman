@@ -11,6 +11,8 @@ class Settings():
         self.pacman_limit = 3         # total pacmans allowed in game before game over
         self.pac_dot_points = 10
         self.power_pellet_points = 50
+
+        self.food_score = 10
         
         self.initialize_speed_settings()
 

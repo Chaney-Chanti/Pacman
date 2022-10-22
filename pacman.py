@@ -22,7 +22,7 @@ class Pacman(pg.sprite.Sprite):
     def check_collisions(self):
         collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
         for food in collisions:
-            self.game.scoreboard.increment_score(food.points)
+            self.game.scoreboard.increment_score()
         collisions = pg.sprite.spritecollide(self ,self.game.map.ghosts, False)
         if collisions:
             self.die()

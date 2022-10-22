@@ -22,7 +22,6 @@ def check_keydown_events(event, settings, pacman):
     key = event.key
     print(key)
     if key in movement.keys(): 
-        print('old pos:', pacman.x, pacman.y)
         if key == 1073741904: #left
             pacman.x += -1
             pacman.direction = 'left'
@@ -35,7 +34,6 @@ def check_keydown_events(event, settings, pacman):
         if key == 1073741905: #down
             pacman.y += 1
             pacman.direction = 'down'
-        print('new pos:', pacman.x, pacman.y)
 
 # def check_keyup_events(event):
 #     pass

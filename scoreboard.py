@@ -19,7 +19,7 @@ class Scoreboard:
         self.prep_score()
 
     def increment_score(self): 
-        self.score += self.settings.alien_points
+        self.score += self.settings.food_score
         self.prep_score()
 
     def prep_score(self): 
