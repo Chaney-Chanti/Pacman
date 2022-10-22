@@ -11,6 +11,7 @@ class Map:
         self.walls = Group()
         self.food = Group()
         self.ghosts = Group()
+        self.spawns = {}
         # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
         # self.tile_size = self.get_tile_size()
