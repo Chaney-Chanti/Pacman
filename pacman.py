@@ -6,6 +6,9 @@ class Pacman(pg.sprite.Sprite):
         self.game = game
         self.image = pg.image.load('assets/PacUp1.png')
         self.rect = self.image.get_rect()
+        self.x = x
+        self. y = y
+        self.direction = 'up'
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = game.screen
 
@@ -38,4 +41,13 @@ class Pacman(pg.sprite.Sprite):
         # self.check_collisions_wall()
 
     def draw(self): 
+        if self.direction == 'up':
+            self.image = pg.image.load('assets/PacR1.png')
+        if self.direction == 'down':
+            self.image = pg.image.load('assets/PacD1.png')
+        if self.direction == 'left':
+            self.image = pg.image.load('assets/PacL1.png')
+        if self.direction == 'right':
+            self.image = pg.image.load('assets/PacUp1.png')
+        self.rect.left, self.rect.top = self.x * self.rect.width, self.y * self.rect.height
         self.screen.blit(self.image, self.rect)

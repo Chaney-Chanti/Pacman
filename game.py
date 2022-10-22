@@ -2,6 +2,7 @@ import time
 import pygame as pg
 from settings import Settings
 from map import Map
+from map import Pacman
 import game_functions as gf
 from sound import Sound
 from scoreboard import Scoreboard
@@ -17,7 +18,7 @@ class Game:
         self.settings = Settings()
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
-        self.map = Map(game=self)
+        self.map = Map(self)
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
         self.settings.initialize_speed_settings()
@@ -30,7 +31,6 @@ class Game:
     def game_over(self):
         print('Pacman is dead: game over!')
         self.sound.gameover()
-        #self.ship.pacman_left = self.settings.pacman_limit
         self.sound.stop_bg()
         self.reset()
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
@@ -127,7 +127,7 @@ class Game:
         pg.mixer.music.stop()
 
         while True:
-            gf.check_events(settings=self.settings)
+            gf.check_events(settings=self.settings, pacman=self.map.pacman)
             self.screen.fill(self.settings.bg_color)
             self.map.update()
             self.scoreboard.update()
