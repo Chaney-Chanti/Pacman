@@ -1,12 +1,13 @@
 import pygame as pg
 
 class Pacman(pg.sprite.Sprite):
-    def __init__(self, screen, x, y):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
+        self.game = game
         self.image = pg.image.load('assets/PacUp1.png')
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
-        self.screen = screen
+        self.screen = game.screen
 
         self.dying = self.dead = False
                         
@@ -15,17 +16,20 @@ class Pacman(pg.sprite.Sprite):
         # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
         # self.timer = self.timer_normal 
 
-    def check_collisions_ghost():
-        pass
+    def check_collisions_food(self):
+        collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
+        for food in collisions:
+            self.game.scoreboard.increment_score(food.points)
 
-    def check_collisions_wall():
+    def check_collisions_wall(self):
         pass
 
     def update(self):
+        self.check_collisions_food()
         self.draw()
         return
-        self.check_collisions_ghost()
-        self.check_collisions_wall()
+        # self.check_collisions_ghost()
+        # self.check_collisions_wall()
 
     def draw(self): 
         self.screen.blit(self.image, self.rect)

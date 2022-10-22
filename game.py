@@ -7,7 +7,6 @@ from sound import Sound
 from scoreboard import Scoreboard
 from button import Button
 import sys
-import pprint
 
 def get_font(size): 
     return pg.font.Font("assets/font.ttf", size)
@@ -18,7 +17,7 @@ class Game:
         self.settings = Settings()
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
-        self.map = Map(self.screen)
+        self.map = Map(game=self)
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
         self.settings.initialize_speed_settings()

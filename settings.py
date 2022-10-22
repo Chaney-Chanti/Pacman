@@ -9,6 +9,8 @@ class Settings():
         self.bg_color = (50, 50, 50)
         
         self.pacman_limit = 3         # total pacmans allowed in game before game over
+        self.pac_dot_points = 10
+        self.power_pellet_points = 50
         
         self.initialize_speed_settings()
 
