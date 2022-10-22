@@ -11,7 +11,7 @@ class Map:
         self.walls = Group()
         self.food = Group()
         self.ghosts = Group()
-        self.spawns = {}
+        self.spawn_points = {}
         # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
         # self.tile_size = self.get_tile_size()
@@ -46,15 +46,20 @@ class Map:
                     newFood = Food(self.game, column, row, 2)
                     self.food.add(newFood)
                 elif self.game_map[row][column] == 'P':
-                    self.pacman = Pacman(self.game, column, row)
+                    self.spawn_points['Pacman'] = (column, row)
+                    # self.pacman = Pacman(self.game, column, row)
                 elif self.game_map[row][column] == 'B':
-                    self.blinky = Blinky(self.screen, column, row)
-                    self.ghosts.add(self.blinky)
+                    self.spawn_points['Blinky'] = (column, row)
+                    # self.blinky = Blinky(self.screen, column, row)
+                    # self.ghosts.add(self.blinky)
                 elif self.game_map[row][column] == 'C':
-                    self.clyde = Clyde(self.screen, column, row)
-                    self.ghosts.add(self.clyde)
+                    self.spawn_points['Clyde'] = (column, row)
+                    # self.clyde = Clyde(self.screen, column, row)
+                    # self.ghosts.add(self.clyde)
                 elif self.game_map[row][column] == 'I':
-                    self.inky = Inky(self.screen, column, row)
+                    self.spawn_points['Inky'] = (column, row)
+                    # self.inky = Inky(self.screen, column, row)
+                    # self.ghosts.add(self.inky)
                 # elif self.game_map[row][column] == 'Y':
                 #     self.inky = Pinky(self.screen, column, row)
                 else:
@@ -69,10 +74,9 @@ class Map:
             wall.draw()
         for food in self.food:
             food.draw()
-        self.pacman.update()
-        self.blinky.update()
-        self.clyde.update()
-        self.inky.update()
+        # self.blinky.update()
+        # self.clyde.update()
+        # self.inky.update()
 
 
 class Wall(pg.sprite.Sprite):

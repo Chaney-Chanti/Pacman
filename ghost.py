@@ -1,4 +1,23 @@
-import pygame as pg 
+import pygame as pg
+from pygame.sprite import Sprite, Group
+
+
+class Ghosts:
+    def __init__(self, game, spawns):
+        self.ghosts = Group()
+        self.spawns = spawns
+        self.game = game
+        self.screen = self.game.screen
+        self.blinky = Blinky(self.screen, self.spawns['Blinky'][0], self.spawns['Blinky'][1])
+        self.clyde = Clyde(self.screen, self.spawns['Clyde'][0], self.spawns['Clyde'][1])
+        self.inky = Inky(self.screen, self.spawns['Inky'][0], self.spawns['Inky'][1])
+        self.ghosts.add(self.blinky)
+        self.ghosts.add(self.clyde)
+        self.ghosts.add(self.inky)
+    
+    def update(self):
+        self.ghosts.update()
+                    
 
 class Ghost(pg.sprite.Sprite):
     def __init__(self, screen, x, y, image):

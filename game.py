@@ -2,7 +2,8 @@ import time
 import pygame as pg
 from settings import Settings
 from map import Map
-from map import Pacman
+from pacman import Pacman
+from ghost import Ghosts
 import game_functions as gf
 from sound import Sound
 from scoreboard import Scoreboard
@@ -19,6 +20,11 @@ class Game:
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
         self.map = Map(self)
+
+        self.spawns = self.map.spawn_points
+        self.pacman = Pacman(self, self.spawns['Pacman'][0], self.spawns['Pacman'][1])
+        self.ghosts = Ghosts(self, self.map.spawn_points)
+
         self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.scoreboard = Scoreboard(game=self)  
         self.settings.initialize_speed_settings()
@@ -127,9 +133,11 @@ class Game:
         pg.mixer.music.stop()
 
         while True:
-            gf.check_events(settings=self.settings, pacman=self.map.pacman)
+            gf.check_events(settings=self.settings, pacman=self.pacman)
             self.screen.fill(self.settings.bg_color)
             self.map.update()
+            self.pacman.update()
+            self.ghosts.update()
             self.scoreboard.update()
             pg.display.flip()
 
