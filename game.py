@@ -19,6 +19,7 @@ class Game:
         self.settings = Settings()
         size = self.settings.screen_width, self.settings.screen_height   # tuple
         self.screen = pg.display.set_mode(size=size)
+        self.screen_rect = self.screen.get_rect()
         self.map = Map(self)
 
         self.spawns = self.map.spawn_points
@@ -51,7 +52,7 @@ class Game:
             
             TITLE = pg.image.load("assets/PacmanTitle.png")
             MENU_TITLE = pg.transform.scale(TITLE, (800,800))
-            MENU_RECT = MENU_TITLE.get_rect(center=(self.settings.screen_width / 2, (self.settings.screen_height / 2) - 300))
+            MENU_RECT = MENU_TITLE.get_rect(center=(self.settings.screen_width / 2, (self.screen_rect.top + 125)))
             self.screen.blit(MENU_TITLE, MENU_RECT)
             
             PACMAN = pg.image.load("assets/PacR2.png")
@@ -72,11 +73,11 @@ class Game:
             self.screen.blit(CLYDE, CLYDEPOS)
             #self.screen.blit(BLINKY, GHOSTPOS)
             
-            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 200), 
+            PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.screen_rect.bottom) - 250), 
                 text_input="PLAY GAME", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
-            HIGH_SCORE_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 300), 
+            HIGH_SCORE_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.screen_rect.bottom) - 150), 
                 text_input="HIGH SCORE", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.settings.screen_height / 2) + 400), 
+            QUIT_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.screen_rect.bottom) - 50), 
                 text_input="QUIT GAME", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
 
             for button in [PLAY_BUTTON,QUIT_BUTTON,HIGH_SCORE_BUTTON]:
@@ -109,10 +110,10 @@ class Game:
         text_rect= text.get_rect(center=((self.settings.screen_width) / 2, (self.settings.screen_height) / 2))
         while True:
             MENU_MOUSE = pg.mouse.get_pos()
-            self.screen.fill(self.settings.bg_color)
+            self.screen.fill((0,0,0))
             self.screen.blit(text, text_rect)
             
-            BACK_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(150, 50), 
+            BACK_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.screen_rect.top + 130, self.screen_rect.left + 50), 
                 text_input="<-BACK", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
             for button in [BACK_BUTTON]:
                 button.changeColor(MENU_MOUSE)
