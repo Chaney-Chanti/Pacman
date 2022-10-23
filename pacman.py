@@ -32,9 +32,10 @@ class Pacman(pg.sprite.Sprite):
 
     def check_collisions(self):
         collisions = pg.sprite.spritecollide(self , self.game.map.food, True)
-        for food in collisions:
-            self.food_sound.play()
-            self.game.scoreboard.increment_score(food.points)
+        if collisions:
+            for food in collisions:
+                self.food_sound.play()
+                self.game.scoreboard.increment_score(food.points)
         collisions = pg.sprite.spritecollide(self ,self.game.ghosts.ghosts, False)
         if collisions:
             if any(type(obj) == Fruit for obj in collisions):
@@ -42,15 +43,19 @@ class Pacman(pg.sprite.Sprite):
                 for obj in collisions:
                     obj.kill()
             else:
+                for obj in collisions:
+                    print(obj)
                 self.die()
 
     def reset(self):
         self.x = self.ogSpawn[0]
         self.y = self.ogSpawn[1]
+        self.direction = 'up'
+        self.rect.left, self.rect.top = self.x * self.rect.width, self.y * self.rect.height
 
     def die(self):
         self.game.game_over()
-        self.game.reset()
+        # self.game.reset()
 
     def check_collisions_wall(self):
         pass
@@ -60,11 +65,17 @@ class Pacman(pg.sprite.Sprite):
         if self.direction == 'left':
             if self.rect.x > self.x * self.rect.width:
                 self.rect.x -= 1
+            elif self.x == 0:
+                self.x = len(max(self.game.map.game_map, key=len)) - 1
+                self.rect.x = self.x * self.rect.width
             elif self.game.map.game_map[self.y][self.x - 1] != '#':
                 self.x -= 1
         elif self.direction == 'right':
             if self.rect.x < self.x * self.rect.width:
                 self.rect.x += 1
+            elif self.x == len(max(self.game.map.game_map, key=len)) - 1:
+                    self.x = 0
+                    self.rect.x = self.x * self.rect.width
             elif self.game.map.game_map[self.y][self.x + 1] != '#':
                 self.x += 1
         elif self.direction == 'up':

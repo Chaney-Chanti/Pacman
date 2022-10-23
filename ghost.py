@@ -32,6 +32,7 @@ class Ghosts:
         self.blinky.x, self.blinky.y = self.spawns['Blinky'][0], self.spawns['Blinky'][1]
         self.clyde.x, self.clyde.y = self.spawns['Clyde'][0], self.spawns['Clyde'][1]
         self.inky.x, self.inky.y = self.spawns['Inky'][0], self.spawns['Inky'][1]
+        self.pinky.x, self.pinky.y = self.spawns['Pinky'][0], self.spawns['Pinky'][1]
 
     def update(self, pacman):
         if not any(type(obj) == Fruit for obj in self.ghosts.sprites()):
