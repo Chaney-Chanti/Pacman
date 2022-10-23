@@ -53,8 +53,8 @@ class Map:
                     self.spawn_points['Clyde'] = (column, row)
                 elif self.game_map[row][column] == 'I':
                     self.spawn_points['Inky'] = (column, row)
-                # elif self.game_map[row][column] == 'Y':
-                #     self.inky = Pinky(self.screen, column, row)
+                elif self.game_map[row][column] == 'Y':
+                    self.spawn_points['Pinky'] = (column, row)
                 elif self.game_map[row][column] == 'F':
                     self.spawn_points['Fruit'].append((column, row))
                 else:
