@@ -45,6 +45,7 @@ class Game:
     
     def menu(self):
         pg.display.set_caption("Menu")
+        pg.mixer.music.play()
         
         while True:
             MENU_MOUSE = pg.mouse.get_pos()
