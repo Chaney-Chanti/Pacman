@@ -11,7 +11,7 @@ class Map:
         self.walls = Group()
         self.food = Group()
         self.ghosts = Group()
-        self.spawn_points = {}
+        self.spawn_points = {'Fruit':[]}
         # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
         # self.tile_size = self.get_tile_size()
@@ -47,21 +47,16 @@ class Map:
                     self.food.add(newFood)
                 elif self.game_map[row][column] == 'P':
                     self.spawn_points['Pacman'] = (column, row)
-                    # self.pacman = Pacman(self.game, column, row)
                 elif self.game_map[row][column] == 'B':
                     self.spawn_points['Blinky'] = (column, row)
-                    # self.blinky = Blinky(self.screen, column, row)
-                    # self.ghosts.add(self.blinky)
                 elif self.game_map[row][column] == 'C':
                     self.spawn_points['Clyde'] = (column, row)
-                    # self.clyde = Clyde(self.screen, column, row)
-                    # self.ghosts.add(self.clyde)
                 elif self.game_map[row][column] == 'I':
                     self.spawn_points['Inky'] = (column, row)
-                    # self.inky = Inky(self.screen, column, row)
-                    # self.ghosts.add(self.inky)
                 # elif self.game_map[row][column] == 'Y':
                 #     self.inky = Pinky(self.screen, column, row)
+                elif self.game_map[row][column] == 'F':
+                    self.spawn_points['Fruit'].append((column, row))
                 else:
                     # print(f'something else at row {row + 1}, column {column + 1}')
                     pass

@@ -1,5 +1,6 @@
 import pygame as pg
 from pygame.sprite import Sprite, Group
+import random
 
 
 class Ghosts:
@@ -16,6 +17,11 @@ class Ghosts:
         self.ghosts.add(self.inky)
     
     def update(self):
+        if not any(type(obj) == Fruit for obj in self.ghosts.sprites()):
+            if random.randrange(0, 1000) < 1:
+                randSpawn = random.choice(self.spawns['Fruit'])
+                fruit = Fruit(self.screen, randSpawn[0], randSpawn[1])
+                self.ghosts.add(fruit)
         self.ghosts.update()
                     
 
@@ -69,3 +75,8 @@ class Inky(Ghost):
         
     def inkyAI():
         pass
+
+class Fruit(Ghost):
+    def __init__(self, screen, x, y):
+        image = 'assets/cherry.png'
+        Ghost.__init__(self, screen, x, y, image)
