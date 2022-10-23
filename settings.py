@@ -5,7 +5,7 @@ class Settings():
         """Initialize the game's settings."""
         # Screen settings
         self.screen_width = 1000
-        self.screen_height = 1000
+        self.screen_height = 990
         self.bg_color = (50, 50, 50)
         
         self.pacman_limit = 3         # total pacmans allowed in game before game over

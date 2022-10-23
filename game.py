@@ -105,7 +105,7 @@ class Game:
         high_score_file = open("high_score.txt", "r")
         name = high_score_file.readline(10)
         score = high_score_file.readline(10)
-        font = get_font(30)
+        font = get_font(20)
         text = font.render("The high score is " + score + ", held by " + name + ".", True, (255,255,255), (0,0,0))
         text_rect= text.get_rect(center=((self.settings.screen_width) / 2, (self.settings.screen_height) / 2))
         while True:
