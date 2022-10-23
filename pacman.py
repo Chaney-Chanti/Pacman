@@ -1,6 +1,7 @@
 import pygame as pg
 from timer import Timer
 from ghost import Fruit
+from pygame import mixer
 
 class Pacman(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -13,6 +14,7 @@ class Pacman(pg.sprite.Sprite):
         self.direction = 'up'
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = game.screen
+        self.food_sound = mixer.Sound('sounds/pacman_eatfruit.wav')
 
         self.dying = self.dead = False
                         
@@ -30,6 +32,7 @@ class Pacman(pg.sprite.Sprite):
     def check_collisions(self):
         collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
         for food in collisions:
+            self.food_sound.play()
             self.game.scoreboard.increment_score(food.points)
         collisions = pg.sprite.spritecollide(self ,self.game.ghosts.ghosts, False)
         if collisions:
