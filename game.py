@@ -60,19 +60,19 @@ class Game:
             BLINKY = pg.image.load("assets/BlinkyR.png")
             INKY = pg.image.load("assets/InkyR.png")
             CLYDE = pg.image.load("assets/ClydeR.png")
-            #BLINKY = pg.image.load("assets/BlinkyR.png")
+            PINKY = pg.image.load("assets/PinkyR.png")
             
-            PACMANPOS = PACMAN.get_rect(center=((self.settings.screen_width / 2) + 50, (self.settings.screen_height / 2)))
-            BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 50, (self.settings.screen_height / 2)))
-            INKYPOS = INKY.get_rect(center=((self.settings.screen_width / 2) - 100, (self.settings.screen_height / 2)))
-            CLYDEPOS = CLYDE.get_rect(center=((self.settings.screen_width / 2) - 150, (self.settings.screen_height / 2)))
-            #BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 100, (self.settings.screen_height / 2)))
+            PACMANPOS = PACMAN.get_rect(center=((self.settings.screen_width / 2) + 150, (self.settings.screen_height / 2)))
+            BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 0, (self.settings.screen_height / 2)))
+            INKYPOS = INKY.get_rect(center=((self.settings.screen_width / 2) - 50, (self.settings.screen_height / 2)))
+            CLYDEPOS = CLYDE.get_rect(center=((self.settings.screen_width / 2) - 100, (self.settings.screen_height / 2)))
+            PINKYPOS = PINKY.get_rect(center=((self.settings.screen_width / 2) - 150, (self.settings.screen_height / 2)))
             
             self.screen.blit(PACMAN,PACMANPOS)
             self.screen.blit(BLINKY, BLINKYPOS)
             self.screen.blit(INKY, INKYPOS)
             self.screen.blit(CLYDE, CLYDEPOS)
-            #self.screen.blit(BLINKY, GHOSTPOS)
+            self.screen.blit(PINKY, PINKYPOS)
             
             PLAY_BUTTON = Button(image=pg.image.load("assets/Play_Rect.png"), pos=(self.settings.screen_width / 2, (self.screen_rect.bottom) - 250), 
                 text_input="PLAY GAME", font=get_font(36), base_color="#d7fcd4", hovering_color="White")
