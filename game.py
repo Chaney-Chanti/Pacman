@@ -45,7 +45,6 @@ class Game:
     
     def menu(self):
         pg.display.set_caption("Menu")
-        self.sound.play_bg()
         
         while True:
             MENU_MOUSE = pg.mouse.get_pos()
@@ -131,10 +130,13 @@ class Game:
         
     def play(self):
         pg.display.set_caption("PACMAN")
-        pg.mixer.music.stop()
+        # pg.mixer.music.stop()
+        # self.sound.play_bg()
+        # time.sleep(4)
+        # self.sound.stop_bg()
 
         while True:
-            gf.check_events(settings=self.settings, pacman=self.pacman)
+            gf.check_events(self, settings=self.settings, pacman=self.pacman)
             self.screen.fill(self.settings.bg_color)
             self.map.update()
             self.pacman.update()

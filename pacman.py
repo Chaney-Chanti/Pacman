@@ -1,4 +1,5 @@
 import pygame as pg
+from timer import Timer
 
 class Pacman(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -14,10 +15,16 @@ class Pacman(pg.sprite.Sprite):
 
         self.dying = self.dead = False
                         
-        # add pacman animation here
-        # self.timer_normal = Alien.alien_timers[type]              
-        # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
-        # self.timer = self.timer_normal 
+        self.pacman_up_animation = [pg.transform.rotozoom(pg.image.load(f'assets/PacUp{n}.png'), 0, 1.0) for n in range(1,3)] #exclusive
+        self.pacman_down_animation = [pg.transform.rotozoom(pg.image.load(f'assets/PacD{n}.png'), 0, 1.0) for n in range(1,3)] #exclusive
+        self.pacman_right_animation = [pg.transform.rotozoom(pg.image.load(f'assets/PacR{n}.png'), 0, 1.0) for n in range(1,3)] #exclusive
+        self.pacman_left_animation = [pg.transform.rotozoom(pg.image.load(f'assets/PacL{n}.png'), 0, 1.0) for n in range(1,3)] #exclusive
+
+        self.timer_up = Timer(image_list=self.pacman_up_animation, delay=100, is_loop=True)
+        self.timer_down = Timer(image_list=self.pacman_down_animation, delay=100, is_loop=True)
+        self.timer_left = Timer(image_list=self.pacman_left_animation, delay=100, is_loop=True)
+        self.timer_right = Timer(image_list=self.pacman_right_animation, delay=100, is_loop=True)
+        self.timer = self.timer_up
 
     def check_collisions(self):
         collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
@@ -42,12 +49,14 @@ class Pacman(pg.sprite.Sprite):
 
     def draw(self): 
         if self.direction == 'up':
-            self.image = pg.image.load('assets/PacR1.png')
+            self.timer = self.timer_up
         if self.direction == 'down':
-            self.image = pg.image.load('assets/PacD1.png')
+            self.timer = self.timer_down
         if self.direction == 'left':
-            self.image = pg.image.load('assets/PacL1.png')
+            self.timer = self.timer_left
         if self.direction == 'right':
-            self.image = pg.image.load('assets/PacUp1.png')
+            self.timer = self.timer_right
+        self.image = self.timer.image()
+        self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = self.x * self.rect.width, self.y * self.rect.height
         self.screen.blit(self.image, self.rect)
