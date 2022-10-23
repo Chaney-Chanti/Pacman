@@ -137,7 +137,7 @@ class Game:
             self.screen.fill(self.settings.bg_color)
             self.map.update()
             self.pacman.update()
-            self.ghosts.update()
+            self.ghosts.update(self.pacman)
             self.scoreboard.update()
             pg.display.flip()
 
