@@ -16,20 +16,16 @@ def check_keydown_events(game, event, settings, pacman):
     print(key)
     if key in movement.keys(): 
         if key == 1073741904: #left
-            if game.map.game_map[pacman.y][pacman.x - 1] != '#':
-                pacman.x += -1
+            if game.map.game_map[pacman.y][pacman.x - 1] != '#' and -10 < (pacman.rect.y - pacman.y * pacman.rect.height) < 10:
                 pacman.direction = 'left'
         if key == 1073741906: #up
-            if game.map.game_map[pacman.y - 1][pacman.x] != '#':
-                pacman.y += -1
+            if game.map.game_map[pacman.y - 1][pacman.x] != '#' and -10 < (pacman.rect.x - pacman.x * pacman.rect.width) < 10:
                 pacman.direction = 'up'
         if key == 1073741903: #right
-             if game.map.game_map[pacman.y][pacman.x + 1] != '#':
-                pacman.x += 1
+             if game.map.game_map[pacman.y][pacman.x + 1] != '#' and -10 < (pacman.rect.y - pacman.y * pacman.rect.height) < 10:
                 pacman.direction = 'right'
         if key == 1073741905: #down
-             if game.map.game_map[pacman.y + 1][pacman.x] != '#':
-                pacman.y += +1
+             if game.map.game_map[pacman.y + 1][pacman.x] != '#' and -10 < (pacman.rect.x - pacman.x * pacman.rect.width) < 10:
                 pacman.direction = 'down'
 
 # def check_keyup_events(event):

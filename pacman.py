@@ -1,5 +1,6 @@
 import pygame as pg
 from timer import Timer
+from ghost import Fruit
 
 class Pacman(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -8,7 +9,7 @@ class Pacman(pg.sprite.Sprite):
         self.image = pg.image.load('assets/PacUp1.png')
         self.rect = self.image.get_rect()
         self.x = x
-        self. y = y
+        self.y = y
         self.direction = 'up'
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = game.screen
@@ -30,9 +31,12 @@ class Pacman(pg.sprite.Sprite):
         collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
         for food in collisions:
             self.game.scoreboard.increment_score(food.points)
-        collisions = pg.sprite.spritecollide(self ,self.game.map.ghosts, False)
+        collisions = pg.sprite.spritecollide(self ,self.game.ghosts.ghosts, False)
         if collisions:
-            self.die()
+            if any(type(obj) == Fruit for obj in collisions):
+                print('cherry')
+            else:
+                self.die()
 
     def die(self):
         self.game.reset()
@@ -42,8 +46,27 @@ class Pacman(pg.sprite.Sprite):
 
     def update(self):
         self.check_collisions()
+        if self.direction == 'left':
+            if self.rect.x > self.x * self.rect.width:
+                self.rect.x -= 1
+            elif self.game.map.game_map[self.y][self.x - 1] != '#':
+                self.x -= 1
+        elif self.direction == 'right':
+            if self.rect.x < self.x * self.rect.width:
+                self.rect.x += 1
+            elif self.game.map.game_map[self.y][self.x + 1] != '#':
+                self.x += 1
+        elif self.direction == 'up':
+            if self.rect.y > self.y * self.rect.height:
+                self.rect.y -= 1
+            elif self.game.map.game_map[self.y - 1][self.x] != '#':
+                self.y -= 1
+        elif self.direction == 'down':
+            if self.rect.y < self.y * self.rect.height:
+                self.rect.y += 1
+            elif self.game.map.game_map[self.y + 1][self.x] != '#':
+                self.y += 1
         self.draw()
-        return
         # self.check_collisions_ghost()
         # self.check_collisions_wall()
 
@@ -57,6 +80,6 @@ class Pacman(pg.sprite.Sprite):
         if self.direction == 'right':
             self.timer = self.timer_right
         self.image = self.timer.image()
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = self.x * self.rect.width, self.y * self.rect.height
+        # self.rect = self.image.get_rect()
+        # self.rect.left, self.rect.top = self.x * self.rect.width, self.y * self.rect.height
         self.screen.blit(self.image, self.rect)
