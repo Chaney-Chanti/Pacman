@@ -9,6 +9,7 @@ class Pacman(pg.sprite.Sprite):
         self.game = game
         self.image = pg.image.load('assets/PacUp1.png')
         self.rect = self.image.get_rect()
+        self.ogSpawn = [x,y]
         self.x = x
         self.y = y
         self.direction = 'up'
@@ -30,18 +31,25 @@ class Pacman(pg.sprite.Sprite):
         self.timer = self.timer_up
 
     def check_collisions(self):
-        collisions = pg.sprite.spritecollide(self ,self.game.map.food, True)
+        collisions = pg.sprite.spritecollide(self , self.game.map.food, True)
         for food in collisions:
             self.food_sound.play()
             self.game.scoreboard.increment_score(food.points)
         collisions = pg.sprite.spritecollide(self ,self.game.ghosts.ghosts, False)
         if collisions:
             if any(type(obj) == Fruit for obj in collisions):
-                print('cherry')
+                self.game.scoreboard.increment_score(300)
+                for obj in collisions:
+                    obj.kill()
             else:
                 self.die()
 
+    def reset(self):
+        self.x = self.ogSpawn[0]
+        self.y = self.ogSpawn[1]
+
     def die(self):
+        self.game.game_over()
         self.game.reset()
 
     def check_collisions_wall(self):

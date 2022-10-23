@@ -32,15 +32,16 @@ class Game:
 
     def reset(self):
         print('Resetting game...')
-        # self.map.reset()
-        # self.scoreboard.reset()
+        self.pacman.reset()
+        self.ghosts.reset()
+        self.map.reset()
+        self.scoreboard.reset()
 
     def game_over(self):
         print('Pacman is dead: game over!')
         self.sound.gameover()
-        self.sound.stop_bg()
+        self.sound.stop()
         self.reset()
-        self.sound = Sound(bg_music="sounds/pacman_beginning.wav")
         self.menu()
     
     def menu(self):
@@ -131,6 +132,7 @@ class Game:
         
     def play(self):
         pg.display.set_caption("PACMAN")
+        self.sound.play(self.sound.sounds['pacman_chomp'])
         # pg.mixer.music.stop()
         # self.sound.play_bg()
         # time.sleep(4)
@@ -148,7 +150,6 @@ class Game:
 def main():
     g = Game()
     g.menu()
-
 
 if __name__ == '__main__':
     main()

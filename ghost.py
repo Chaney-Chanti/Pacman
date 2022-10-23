@@ -1,7 +1,7 @@
 import pygame as pg
 from pygame.sprite import Sprite, Group
 import random
-
+import time
 
 class Ghosts:
     def __init__(self, game, spawns):
@@ -21,13 +21,18 @@ class Ghosts:
         
     def ghostAI(self, pacman):
         self.blinky.blinkyAI(pacman)
-        if(pg.time.get_ticks() >= 3000):
+        if(pg.time.get_ticks() >= 3000): # delay
             self.clyde.clydeAI(pacman)
         if(pg.time.get_ticks() >= 5000):
             self.inky.inkyAI(pacman)
         if(pg.time.get_ticks() >= 7000):
             self.pinky.pinkyAI(pacman)
         
+    def reset(self):
+        self.blinky.x, self.blinky.y = self.spawns['Blinky'][0], self.spawns['Blinky'][1]
+        self.clyde.x, self.clyde.y = self.spawns['Clyde'][0], self.spawns['Clyde'][1]
+        self.inky.x, self.inky.y = self.spawns['Inky'][0], self.spawns['Inky'][1]
+
     def update(self, pacman):
         if not any(type(obj) == Fruit for obj in self.ghosts.sprites()):
             if random.randrange(0, 1000) < 1:
@@ -46,6 +51,7 @@ class Ghost(pg.sprite.Sprite):
         self.image = pg.image.load(image)
         self.game = game
         self.rect = self.image.get_rect()
+        self.x, self.y = x, y
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.rect.x = self.rect.left
         self.rect.y = self.rect.top
@@ -58,6 +64,7 @@ class Ghost(pg.sprite.Sprite):
         # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
         # self.timer = self.timer_normal 
 
+
     def check_collisions_wall(self):
         collisions = pg.sprite.spritecollide(self, self.game.map.walls, False)
         screen_rect = self.screen.get_rect()
@@ -68,6 +75,19 @@ class Ghost(pg.sprite.Sprite):
         else:
             return False
     
+    def moves(self, ghost):
+        moves = ['up', 'down', 'left', 'right']
+        print(ghost.y, ghost.x)
+        if self.game.map.game_map[ghost.y][ghost.x - 1] == '#': #left
+            moves.remove('left')
+        if self.game.map.game_map[ghost.y][ghost.x + 1] == '#': #right
+            moves.remove('right')
+        if self.game.map.game_map[ghost.y - 1][ghost.x] == '#': #up
+            moves.remove('up')
+        if self.game.map.game_map[ghost.y + 1][ghost.x] == '#': #down
+            moves.remove('down')
+        return moves
+
     def fruitAI(self):
         if random.randrange(0, 1000) < 1:
             self.rand = random.randint(0, 3)
@@ -79,7 +99,7 @@ class Ghost(pg.sprite.Sprite):
         if self.rand == 1: #left
             self.rect.x -= 1
             if self.check_collisions_wall():
-                self.rect.x += 1
+                self.rect.x += 1 
                 self.rand = random.randint(0,3)
         if self.rand == 2: #down
             self.rect.y += 1
@@ -105,34 +125,6 @@ class Blinky(Ghost):
         self.rand = random.randint(0, 3)
         
     def blinkyAI(self, pacman):
-        if(pacman.rect.x > self.rect.x): #right
-            self.rect.x += 1
-            if self.check_collisions_wall():
-                self.rect.x -= 1
-            self.image = pg.image.load('assets/BlinkyR.png')
-        if(pacman.rect.x < self.rect.x): #left
-            self.rect.x -= 1
-            if self.check_collisions_wall():
-                self.rect.x += 1
-            self.image = pg.image.load('assets/BlinkyL.png')
-        if(pacman.rect.y > self.rect.y): #down
-            self.rect.y += 1
-            if self.check_collisions_wall():
-                self.rect.y -= 1
-            self.image = pg.image.load('assets/BlinkyD.png')
-        if(pacman.rect.y < self.rect.y): #up
-            self.rect.y -= 1
-            if self.check_collisions_wall():
-                self.rect.y += 1
-            self.image = pg.image.load('assets/BlinkyUp.png')
-    
-class Clyde(Ghost):
-    def __init__(self, game, x, y):
-        image = 'assets/ClydeR.png'
-        Ghost.__init__(self, game, x, y, image)
-        self.rand = random.randint(0, 3)
-        
-    def clydeAI(self, pacman):
         if random.randrange(0, 500) < 1:
             self.rand = random.randint(0, 3)
         if self.rand == 0: #right
@@ -159,6 +151,61 @@ class Clyde(Ghost):
                 self.rect.y += 1
                 self.rand = random.randint(0,3)
             self.image = pg.image.load('assets/ClydeUp.png')
+
+        # if(pacman.rect.x > self.rect.x): #right
+        #     self.rect.x += 1
+        #     if self.check_collisions_wall():
+        #         self.rect.x -= 1
+        #     self.image = pg.image.load('assets/BlinkyR.png')
+        # if(pacman.rect.x < self.rect.x): #left
+        #     self.rect.x -= 1
+        #     if self.check_collisions_wall():
+        #         self.rect.x += 1
+        #     self.image = pg.image.load('assets/BlinkyL.png')
+        # if(pacman.rect.y > self.rect.y): #down
+        #     self.rect.y += 1
+        #     if self.check_collisions_wall():
+        #         self.rect.y -= 1
+        #     self.image = pg.image.load('assets/BlinkyD.png')
+        # if(pacman.rect.y < self.rect.y): #up
+        #     self.rect.y -= 1
+        #     if self.check_collisions_wall():
+        #         self.rect.y += 1
+        #     self.image = pg.image.load('assets/BlinkyUp.png')
+    
+class Clyde(Ghost):
+    def __init__(self, game, x, y):
+        image = 'assets/BlinkyR.png'
+        Ghost.__init__(self, game, x, y, image)
+        self.rand = random.randint(0, 3)
+
+    def clydeAI(self, pacman):
+        if random.randrange(0, 500) < 1:
+            self.rand = random.randint(0, 3)
+        if self.rand == 0: #right
+            self.rect.x += 1
+            if self.check_collisions_wall():
+                self.rect.x -= 1
+                self.rand = random.randint(0,3)
+            self.image = pg.image.load('assets/BlinkyR.png')
+        if self.rand == 1: #left
+            self.rect.x -= 1
+            if self.check_collisions_wall():
+                self.rect.x += 1
+                self.rand = random.randint(0,3)
+                self.image = pg.image.load('assets/BlinkyL.png')
+        if self.rand == 2: #down
+            self.rect.y += 1
+            if self.check_collisions_wall():
+                self.rect.y -= 1
+                self.rand = random.randint(0,3)
+            self.image = pg.image.load('assets/BlinkyD.png')
+        if self.rand == 3: #up
+            self.rect.y -= 1
+            if self.check_collisions_wall():
+                self.rect.y += 1
+                self.rand = random.randint(0,3)
+            self.image = pg.image.load('assets/BlinkyUp.png')
 
 class Inky(Ghost):
     def __init__(self, game, x, y):

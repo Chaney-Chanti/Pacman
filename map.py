@@ -10,7 +10,7 @@ class Map:
         self.screen = game.screen
         self.walls = Group()
         self.food = Group()
-        self.ghosts = Group()
+        # self.ghosts = Group()
         self.spawn_points = {'Fruit':[]}
         # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
@@ -62,7 +62,7 @@ class Map:
                     pass
     
     def reset(self):
-        pass
+        self.create_map()
 
     def update(self):
         for wall in self.walls:
@@ -102,32 +102,3 @@ class Food(pg.sprite.Sprite):
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
-
-# class Pacman(pg.sprite.Sprite):
-#     def __init__(self, game, screen, x, y):
-#         pg.sprite.Sprite.__init__(self)
-#         self.image = pg.image.load('assets/PacUp1.png')
-#         self.rect = self.image.get_rect()
-#         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
-#         self.screen = screen
-#         self.dying = self.dead = False
-                        
-#         # add pacman animation here
-#         # self.timer_normal = Alien.alien_timers[type]              
-#         # self.timer_explosion = Timer(image_list=Alien.alien_explosion_images, is_loop=False)  
-#         # self.timer = self.timer_normal 
-
-#     def check_collisions_ghost():
-#         pass
-
-#     def check_collisions_wall():
-#         pass
-
-#     def update(self):
-#         self.draw()
-#         return
-#         self.check_collisions_ghost()
-#         self.check_collisions_wall()
-
-#     def draw(self): 
-#         self.screen.blit(self.image, self.rect)
