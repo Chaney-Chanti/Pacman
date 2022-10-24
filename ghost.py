@@ -1,6 +1,7 @@
 import pygame as pg
 from pygame.sprite import Sprite, Group
 import random
+from timer import Timer
 import time
 
 class Ghosts:
@@ -18,6 +19,12 @@ class Ghosts:
         self.ghosts.add(self.inky)
         self.ghosts.add(self.pinky)
         #self.counter = 0
+    
+    def vulnerable(self):
+        self.blinky.is_vuln = True
+        self.clyde.is_vuln = True
+        self.inky.is_vuln = True
+        self.pinky.is_vuln = True
         
     def ghostAI(self, pacman):
         self.blinky.blinkyAI(pacman)
@@ -51,12 +58,16 @@ class Ghost(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.image.load(image)
         self.game = game
+        self.is_vuln = False
         self.rect = self.image.get_rect()
         self.x, self.y = x, y
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.rect.x = self.rect.left
         self.rect.y = self.rect.top
         self.screen = self.game.screen
+        
+        self.ghost_vuln_animation = [pg.transform.rotozoom(pg.image.load(f'assets/GhostsBlue{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.ghost_blue_timer = Timer(image_list=self.ghost_vuln_animation, delay=100, is_loop=True) 
 
         self.dying = self.dead = False
                         
@@ -121,8 +132,20 @@ class Ghost(pg.sprite.Sprite):
         
 class Blinky(Ghost):
     def __init__(self, game, x, y):
-        image = 'assets/BlinkyR.png'
+        image = 'assets/BlinkyR1.png'
         Ghost.__init__(self, game, x, y, image)
+        
+        self.blinky_up = [pg.transform.rotozoom(pg.image.load(f'assets/BlinkyUp{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.blinky_down = [pg.transform.rotozoom(pg.image.load(f'assets/BlinkyD{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.blinky_right = [pg.transform.rotozoom(pg.image.load(f'assets/BlinkyR{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.blinky_left = [pg.transform.rotozoom(pg.image.load(f'assets/BlinkyL{n}.png'), 0, 1.0) for n in range(1,3)]
+        
+        self.timer_up = Timer(image_list=self.blinky_up, delay=100, is_loop=True)
+        self.timer_down = Timer(image_list=self.blinky_down, delay=100, is_loop=True)
+        self.timer_right = Timer(image_list=self.blinky_right, delay=100, is_loop=True)
+        self.timer_left = Timer(image_list=self.blinky_left, delay=100, is_loop=True)
+        self.timer = self.timer_up
+        
         self.rand = random.randint(0, 3)
         
     def blinkyAI(self, pacman):
@@ -133,25 +156,51 @@ class Blinky(Ghost):
             if self.check_collisions_wall():
                 self.rect.x -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/ClydeR.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_right
+                self.image = self.timer.image()
         if self.rand == 1: #left
             self.rect.x -= 1
             if self.check_collisions_wall():
                 self.rect.x += 1
                 self.rand = random.randint(0,3)
-                self.image = pg.image.load('assets/ClydeL.png')
+            if(self.is_vuln):
+                #self.image = pg.image.load('assets/GhostsWhite1.png')
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                #self.image = pg.image.load('assets/BlinkyL.png')
+                self.timer = self.timer_left
+                self.image = self.timer.image()
         if self.rand == 2: #down
             self.rect.y += 1
             if self.check_collisions_wall():
                 self.rect.y -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/ClydeD.png')
+            if(self.is_vuln):
+                #self.image = pg.image.load('assets/GhostsWhite1.png')
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                #self.image = pg.image.load('assets/BlinkyD.png')
+                self.timer = self.timer_down
+                self.image = self.timer.image()
         if self.rand == 3: #up
             self.rect.y -= 1
             if self.check_collisions_wall():
                 self.rect.y += 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/ClydeUp.png')
+            if(self.is_vuln):
+                #self.image = pg.image.load('assets/GhostsWhite1.png')
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                #self.image = pg.image.load('assets/BlinkyUp.png')
+                self.timer = self.timer_up
+                self.image = self.timer.image()
 
         # if(pacman.rect.x > self.rect.x): #right
         #     self.rect.x += 1
@@ -176,8 +225,20 @@ class Blinky(Ghost):
     
 class Clyde(Ghost):
     def __init__(self, game, x, y):
-        image = 'assets/BlinkyR.png'
+        image = 'assets/ClydeR1.png'
         Ghost.__init__(self, game, x, y, image)
+        
+        self.clyde_up = [pg.transform.rotozoom(pg.image.load(f'assets/ClydeUp{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.clyde_down = [pg.transform.rotozoom(pg.image.load(f'assets/ClydeD{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.clyde_right = [pg.transform.rotozoom(pg.image.load(f'assets/ClydeR{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.clyde_left = [pg.transform.rotozoom(pg.image.load(f'assets/ClydeL{n}.png'), 0, 1.0) for n in range(1,3)]
+        
+        self.timer_up = Timer(image_list=self.clyde_up, delay=100, is_loop=True)
+        self.timer_down = Timer(image_list=self.clyde_down, delay=100, is_loop=True)
+        self.timer_right = Timer(image_list=self.clyde_right, delay=100, is_loop=True)
+        self.timer_left = Timer(image_list=self.clyde_left, delay=100, is_loop=True)
+        self.timer = self.timer_up
+        
         self.rand = random.randint(0, 3)
 
     def clydeAI(self, pacman):
@@ -188,30 +249,62 @@ class Clyde(Ghost):
             if self.check_collisions_wall():
                 self.rect.x -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/BlinkyR.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_right
+                self.image = self.timer.image()
         if self.rand == 1: #left
             self.rect.x -= 1
             if self.check_collisions_wall():
                 self.rect.x += 1
                 self.rand = random.randint(0,3)
-                self.image = pg.image.load('assets/BlinkyL.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_left
+                self.image = self.timer.image()
         if self.rand == 2: #down
             self.rect.y += 1
             if self.check_collisions_wall():
                 self.rect.y -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/BlinkyD.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_down
+                self.image = self.timer.image()
         if self.rand == 3: #up
             self.rect.y -= 1
             if self.check_collisions_wall():
                 self.rect.y += 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/BlinkyUp.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_up
+                self.image = self.timer.image()
 
 class Inky(Ghost):
     def __init__(self, game, x, y):
-        image = 'assets/InkyR.png'
+        image = 'assets/InkyR1.png'
         Ghost.__init__(self, game, x, y, image)
+        
+        self.inky_up = [pg.transform.rotozoom(pg.image.load(f'assets/InkyUp{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.inky_down = [pg.transform.rotozoom(pg.image.load(f'assets/InkyD{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.inky_right = [pg.transform.rotozoom(pg.image.load(f'assets/InkyR{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.inky_left = [pg.transform.rotozoom(pg.image.load(f'assets/InkyL{n}.png'), 0, 1.0) for n in range(1,3)]
+        
+        self.timer_up = Timer(image_list=self.inky_up, delay=100, is_loop=True)
+        self.timer_down = Timer(image_list=self.inky_down, delay=100, is_loop=True)
+        self.timer_right = Timer(image_list=self.inky_right, delay=100, is_loop=True)
+        self.timer_left = Timer(image_list=self.inky_left, delay=100, is_loop=True)
+        self.timer = self.timer_up
+        
         self.rand = random.randint(0, 3)
         
     def inkyAI(self, pacman):
@@ -222,30 +315,62 @@ class Inky(Ghost):
             if self.check_collisions_wall():
                 self.rect.x -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/InkyR.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_right
+                self.image = self.timer.image()
         if self.rand == 1: #left
             self.rect.x -= 1
             if self.check_collisions_wall():
                 self.rect.x += 1
                 self.rand = random.randint(0,3)
-                self.image = pg.image.load('assets/InkyL.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_left
+                self.image = self.timer.image()
         if self.rand == 2: #down
             self.rect.y += 1
             if self.check_collisions_wall():
                 self.rect.y -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/InkyD.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_down
+                self.image = self.timer.image()
         if self.rand == 3: #up
             self.rect.y -= 1
             if self.check_collisions_wall():
                 self.rect.y += 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/InkyUp.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_up
+                self.image = self.timer.image()
             
 class Pinky(Ghost):
     def __init__(self, game, x, y):
-        image = 'assets/PinkyR.png'
+        image = 'assets/PinkyR1.png'
         Ghost.__init__(self, game, x, y, image)
+        
+        self.pinky_up = [pg.transform.rotozoom(pg.image.load(f'assets/PinkyUp{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.pinky_down = [pg.transform.rotozoom(pg.image.load(f'assets/PinkyD{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.pinky_right = [pg.transform.rotozoom(pg.image.load(f'assets/PinkyR{n}.png'), 0, 1.0) for n in range(1,3)]
+        self.pinky_left = [pg.transform.rotozoom(pg.image.load(f'assets/PinkyL{n}.png'), 0, 1.0) for n in range(1,3)]
+        
+        self.timer_up = Timer(image_list=self.pinky_up, delay=100, is_loop=True)
+        self.timer_down = Timer(image_list=self.pinky_down, delay=100, is_loop=True)
+        self.timer_right = Timer(image_list=self.pinky_right, delay=100, is_loop=True)
+        self.timer_left = Timer(image_list=self.pinky_left, delay=100, is_loop=True)
+        self.timer = self.timer_up
+        
         self.rand = random.randint(0, 3)
         
     def pinkyAI(self, pacman):
@@ -256,25 +381,45 @@ class Pinky(Ghost):
             if self.check_collisions_wall():
                 self.rect.x -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/PinkyR.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_right
+                self.image = self.timer.image()
         if self.rand == 1: #left
             self.rect.x -= 1
             if self.check_collisions_wall():
                 self.rect.x += 1
                 self.rand = random.randint(0,3)
-                self.image = pg.image.load('assets/PinkyL.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_left
+                self.image = self.timer.image()
         if self.rand == 2: #down
             self.rect.y += 1
             if self.check_collisions_wall():
                 self.rect.y -= 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/PinkyD.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_down
+                self.image = self.timer.image()
         if self.rand == 3: #up
             self.rect.y -= 1
             if self.check_collisions_wall():
                 self.rect.y += 1
                 self.rand = random.randint(0,3)
-            self.image = pg.image.load('assets/PinkyUp.png')
+            if(self.is_vuln):
+                self.timer = self.ghost_blue_timer
+                self.image = self.ghost_blue_timer.image()
+            else:
+                self.timer = self.timer_up
+                self.image = self.timer.image()
             
 
 class Fruit(Ghost):

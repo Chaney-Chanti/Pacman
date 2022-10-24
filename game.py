@@ -57,10 +57,10 @@ class Game:
             self.screen.blit(MENU_TITLE, MENU_RECT)
             
             PACMAN = pg.image.load("assets/PacR2.png")
-            BLINKY = pg.image.load("assets/BlinkyR.png")
-            INKY = pg.image.load("assets/InkyR.png")
-            CLYDE = pg.image.load("assets/ClydeR.png")
-            PINKY = pg.image.load("assets/PinkyR.png")
+            BLINKY = pg.image.load("assets/BlinkyR1.png")
+            INKY = pg.image.load("assets/InkyR1.png")
+            CLYDE = pg.image.load("assets/ClydeR1.png")
+            PINKY = pg.image.load("assets/PinkyR1.png")
             
             PACMANPOS = PACMAN.get_rect(center=((self.settings.screen_width / 2) + 150, (self.settings.screen_height / 2)))
             BLINKYPOS = BLINKY.get_rect(center=((self.settings.screen_width / 2) - 0, (self.settings.screen_height / 2)))
