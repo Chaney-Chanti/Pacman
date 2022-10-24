@@ -16,6 +16,7 @@ class Pacman(pg.sprite.Sprite):
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.screen = game.screen
         self.food_sound = mixer.Sound('sounds/pacman_eatfruit.wav')
+        self.food_sound.set_volume(0.2)
 
         self.dying = self.dead = False
                         
