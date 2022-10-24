@@ -10,11 +10,8 @@ class Map:
         self.screen = game.screen
         self.walls = Group()
         self.food = Group()
-        # self.ghosts = Group()
         self.spawn_points = {'Fruit':[]}
-        # self.pacman = pg.sprite.Group()
         self.game_map = self.read_map_file()
-        # self.tile_size = self.get_tile_size()
         self.create_map()
 
     def read_map_file(self):
@@ -62,6 +59,9 @@ class Map:
                     pass
     
     def reset(self):
+        self.walls.empty()
+        self.food.empty()
+        self.spawn_points = {'Fruit':[]}
         self.create_map()
 
     def update(self):

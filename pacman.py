@@ -1,6 +1,6 @@
 import pygame as pg
 from timer import Timer
-from ghost import Fruit 
+from ghost import Fruit
 from pygame import mixer
 
 class Pacman(pg.sprite.Sprite):
@@ -41,13 +41,16 @@ class Pacman(pg.sprite.Sprite):
         collisions = pg.sprite.spritecollide(self ,self.game.ghosts.ghosts, False)
         if collisions:
             if any(type(obj) == Fruit for obj in collisions):
-                self.game.scoreboard.increment_score(300)
                 for obj in collisions:
+                    self.game.scoreboard.increment_score(300)
                     obj.kill()
             else:
-                for obj in collisions:
-                    print(obj)
-                self.die()
+                for ghost in collisions:
+                    if ghost.is_vuln == True:
+                        self.game.scoreboard.increment_score(200)
+                        ghost.reset()
+                    else:
+                        self.die()
 
     def reset(self):
         self.x = self.ogSpawn[0]

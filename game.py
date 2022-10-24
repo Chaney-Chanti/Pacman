@@ -46,6 +46,7 @@ class Game:
     
     def menu(self):
         pg.display.set_caption("Menu")
+        pg.mixer.music.load('sounds/pacman_beginning.wav')
         pg.mixer.music.play()
         
         while True:

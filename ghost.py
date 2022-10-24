@@ -36,10 +36,20 @@ class Ghosts:
             self.pinky.pinkyAI(pacman)
         
     def reset(self):
-        self.blinky.x, self.blinky.y = self.spawns['Blinky'][0], self.spawns['Blinky'][1]
-        self.clyde.x, self.clyde.y = self.spawns['Clyde'][0], self.spawns['Clyde'][1]
-        self.inky.x, self.inky.y = self.spawns['Inky'][0], self.spawns['Inky'][1]
-        self.pinky.x, self.pinky.y = self.spawns['Pinky'][0], self.spawns['Pinky'][1]
+        self.ghosts.empty()
+        self.blinky = Blinky(self.game, self.spawns['Blinky'][0], self.spawns['Blinky'][1])
+        self.clyde = Clyde(self.game, self.spawns['Clyde'][0], self.spawns['Clyde'][1])
+        self.inky = Inky(self.game, self.spawns['Inky'][0], self.spawns['Inky'][1])
+        self.pinky = Pinky(self.game, self.spawns['Pinky'][0], self.spawns['Pinky'][1])
+        self.ghosts.add(self.blinky)
+        self.ghosts.add(self.clyde)
+        self.ghosts.add(self.inky)
+        self.ghosts.add(self.pinky)
+
+        # self.blinky.x, self.blinky.y = self.spawns['Blinky'][0], self.spawns['Blinky'][1]
+        # self.clyde.x, self.clyde.y = self.spawns['Clyde'][0], self.spawns['Clyde'][1]
+        # self.inky.x, self.inky.y = self.spawns['Inky'][0], self.spawns['Inky'][1]
+        # self.pinky.x, self.pinky.y = self.spawns['Pinky'][0], self.spawns['Pinky'][1]
 
     def update(self, pacman):
         if not any(type(obj) == Fruit for obj in self.ghosts.sprites()):
@@ -61,6 +71,7 @@ class Ghost(pg.sprite.Sprite):
         self.is_vuln = False
         self.rect = self.image.get_rect()
         self.x, self.y = x, y
+        self.spawn_point = (x, y)
         self.rect.left, self.rect.top = x * self.rect.width, y * self.rect.height
         self.rect.x = self.rect.left
         self.rect.y = self.rect.top
@@ -86,7 +97,10 @@ class Ghost(pg.sprite.Sprite):
             return True
         else:
             return False
-    
+
+    def reset(self):
+        self.rect.left, self.rect.top = self.spawn_point[0] * self.rect.width, self.spawn_point[1] * self.rect.height
+
     def moves(self, ghost):
         moves = ['up', 'down', 'left', 'right']
         print(ghost.y, ghost.x)
