@@ -18,6 +18,8 @@ class Ghosts:
         self.ghosts.add(self.clyde)
         self.ghosts.add(self.inky)
         self.ghosts.add(self.pinky)
+        self.edible = False
+        self.edible_timer = 0
         #self.counter = 0
     
     def vulnerable(self):
@@ -25,6 +27,7 @@ class Ghosts:
         self.clyde.is_vuln = True
         self.inky.is_vuln = True
         self.pinky.is_vuln = True
+        self.edible = True
         
     def ghostAI(self, pacman):
         self.blinky.blinkyAI(pacman)
@@ -52,6 +55,13 @@ class Ghosts:
         # self.pinky.x, self.pinky.y = self.spawns['Pinky'][0], self.spawns['Pinky'][1]
 
     def update(self, pacman):
+        if self.edible == True:
+            self.edible_timer += 1
+        if self.edible_timer >= 1000:
+            for ghost in self.ghosts:
+                ghost.is_vuln = False
+            self.edible = False
+            self.edible_timer = 0
         if not any(type(obj) == Fruit for obj in self.ghosts.sprites()):
             if random.randrange(0, 1000) < 1:
                 randSpawn = random.choice(self.spawns['Fruit'])
